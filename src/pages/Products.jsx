@@ -1,37 +1,31 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchProducts = async () => {
+  const res = await axios.get("https://fakestoreapi.com/products");
+  return res.data;
+};
 
 export default function Products() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { data, isLoading, isError } = useQuery({
+    queryFn: fetchProducts,
+    queryKey: ["products"],
+  });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get("https://fakestoreapi.com/products");
-        setProducts(res.data);
-      } catch (err) {
-        setError("Failed to fetch products ");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading)
+  if (isLoading)
     return (
       <div className="text-center text-blue-400 text-2xl mt-20">
         Loading products...
       </div>
     );
 
-  if (error)
+  if (isError)
     return (
-      <div className="text-center text-red-400 text-2xl mt-20">{error}</div>
+      <div className="text-center text-red-400 text-2xl mt-20">
+        Failed to fetch products
+      </div>
     );
 
   return (
@@ -39,7 +33,7 @@ export default function Products() {
       <h1 className="text-3xl font-bold text-blue-400 mb-6">Products</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {products.map((p) => (
+        {data.map((p) => (
           <div
             key={p.id}
             className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col justify-between hover:scale-105 transition-transform"
