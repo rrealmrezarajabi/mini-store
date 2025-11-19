@@ -14,6 +14,10 @@ export default function App() {
     <div className="min-h-screen bg-gray-900 text-white">
       <nav className="bg-blue-700 p-4 flex justify-between items-center text-lg shadow-md">
         <div className="flex gap-6">
+          <div className="font-bold text-2xl">Mini Store.</div>
+        </div>
+
+        <div className="flex gap-6 items-center">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -58,18 +62,17 @@ export default function App() {
           >
             Contact
           </NavLink>
+          <NavLink
+            to="/cart"
+            className="relative flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-full shadow hover:bg-gray-200 transition"
+          >
+            🛒
+            <span className="font-bold">Cart</span>
+            <span className="bg-red-600 text-white text-sm rounded-full px-2 py-0.5 absolute -top-2 -right-2">
+              {cartCount}
+            </span>
+          </NavLink>
         </div>
-
-        <NavLink
-          to="/cart"
-          className="relative flex items-center gap-2 bg-white text-blue-700 px-4 py-2 rounded-full shadow hover:bg-gray-200 transition"
-        >
-          🛒
-          <span className="font-bold">Cart</span>
-          <span className="bg-red-600 text-white text-sm rounded-full px-2 py-0.5 absolute -top-2 -right-2">
-            {cartCount}
-          </span>
-        </NavLink>
       </nav>
 
       <main className="p-6">
