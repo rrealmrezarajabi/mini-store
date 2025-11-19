@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-
+import { useCart } from "../context/CartContext";
 const fetchProducts = async () => {
   const res = await axios.get("https://fakestoreapi.com/products");
   return res.data;
@@ -12,13 +12,14 @@ export default function Products() {
   const [sortType, setSortType] = useState("");
   const [search, setSearch] = useState("");
   const [productCount, setProductCount] = useState(null);
+  const { addToCart } = useCart();
 
   const { data, isLoading, isError } = useQuery({
     queryFn: fetchProducts,
     queryKey: ["products"],
-    onSuccess:(res=>{
-      setProductCount(res.length)
-    })
+    onSuccess: (res) => {
+      setProductCount(res.length);
+    },
   });
 
   if (isLoading)
@@ -41,7 +42,6 @@ export default function Products() {
         </div>
       </div>
     );
-
 
   if (isError)
     return (
@@ -110,6 +110,12 @@ export default function Products() {
               {p.title}
             </h2>
             <p className="text-gray-400 mb-3">${p.price}</p>
+            <button
+              onClick={() => addToCart(p)}
+              className="bg-green-500 hover:bg-green-600 cursor-pointer w-[100px] rounded-lg p-1 mb-4 mr-2"
+            >
+              Add To Cart
+            </button>
             <Link
               to={`/products/${p.id}`}
               className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition-colors"

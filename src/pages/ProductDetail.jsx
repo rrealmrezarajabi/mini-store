@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { useCart } from "../context/CartContext";
 
 const fetchProduct = async ({ queryKey }) => {
   const id = queryKey[1];
@@ -9,6 +10,8 @@ const fetchProduct = async ({ queryKey }) => {
 };
 
 export default function ProductDetail() {
+  const { addToCart } = useCart(); 
+
   const { id } = useParams();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -31,7 +34,7 @@ export default function ProductDetail() {
     );
 
   return (
-    <div className="p-10 text-center">
+    <div className="p-10 text-center flex flex-col items-center">
       <img
         src={data.image}
         alt={data.title}
@@ -45,9 +48,16 @@ export default function ProductDetail() {
         Price: ${data.price}
       </p>
 
+      <button
+        onClick={() => addToCart(data)}
+        className="bg-green-500 hover:bg-green-600 cursor-pointer w-[200px] rounded-lg p-1 mb-4"
+      >
+        Add To Cart
+      </button>
+
       <Link
         to="/products"
-        className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition-colors"
+        className=" w-[200px] bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition-colors"
       >
         ← Back to Products
       </Link>

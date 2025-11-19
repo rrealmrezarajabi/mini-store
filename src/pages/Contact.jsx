@@ -1,6 +1,9 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 export default function Contact() {
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const {
     register,
     handleSubmit,
@@ -9,12 +12,34 @@ export default function Contact() {
   } = useForm();
 
   const onSubmit = (data) => {
-    alert(`✅ Thank you ${data.name}! Your message was sent.`);
+    setModalMessage(`${data.name} Your message was sent.`);
+    setShowModal(true);
+
+    setTimeout(() => {
+      setShowModal(false);
+    }, 3000);
     reset();
   };
 
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center bg-gray-900 text-white p-6">
+      {showModal && (
+        <div
+          className="
+    fixed bottom-4 left-1/2 -translate-x-1/2
+    bg-blue-500/40 
+    backdrop-blur-md 
+    border border-blue-300/30
+    text-white px-6 py-3 
+    rounded-xl 
+    shadow-xl 
+    transition-all duration-300
+    z-50
+  "
+        >
+          {modalMessage}
+        </div>
+      )}
       <h1 className="text-3xl font-bold text-blue-400 mb-6">Contact Us</h1>
 
       <form
